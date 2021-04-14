@@ -1,5 +1,5 @@
 ---
-title: "Uebung01_RiemannscheZetaFunktion"
+title: "Übung 01: Riemannsche Zeta Funktion"
 author: "Tobias Blesgen und Leonardo Thome"
 date: "4/14/2021"
 output: pdf_document
@@ -17,27 +17,26 @@ $\zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s}$
 #include <stdio.h>
 
 //[[Rcpp::export]]
-double zetafunktion(int s){
-    double genauigkeit = 0.00001 * 0.00001 ;
+double zetafunktion(){
+    double genauigkeit = 0.00001 * 0.00001 * 0.00001;
     double sum = 0;
     double vorherig = -1;
     long int ksWert = 1;
     for(int k = 1; sum - vorherig > genauigkeit; k++){
         vorherig = sum;
         sum += 1.0/ksWert;
-        ksWert += 2*k +1;
+        ksWert += 2*k+1;
     }
-    printf("Hello\n");
+    Rprintf("Der Summenwert ist %.15lf\n", sum);
     return sum;
 }
 ```
 
 
-Test the `square()` function:
+Funktionsaufruf:
 
 
 ```{r}
-c = zetafunktion(s = 2)
-c
+c = zetafunktion()
 ```
-
+Der eigentliche Wert sollte: `1.644934066848226` sein. Während VSC `1.644934035302976` ausgibt.
