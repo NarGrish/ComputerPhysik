@@ -18,17 +18,13 @@ $\zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s}$
 
 //[[Rcpp::export]]
 double zetafunktion(){
-    double genauigkeit = 0.00001 * 0.00001 * 0.00001;
-    double sum = 0;
-    double vorherig = -1;
-    long int ksWert = 1;
-    for(int k = 1; sum - vorherig > genauigkeit; k++){
-        vorherig = sum;
-        sum += 1.0/ksWert;
-        ksWert += 2*k+1;
+    long double sum = 0;
+    for (long int i = 100000000; i > 0; i--)
+    {
+        sum += 1.0/(i*i);
     }
-    Rprintf("Der Summenwert ist %.15lf\n", sum);
     return sum;
+    Rprintf("Die Zahl ergibt sich als %LF\n", sum);
 }
 ```
 
