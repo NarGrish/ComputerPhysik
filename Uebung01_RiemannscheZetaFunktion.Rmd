@@ -30,5 +30,5 @@ plot(pressure)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 # Riemannsche Zeta Funktion
-$\zeta(s) = \sum_{n=0}^N \frac{1}{k^s}$
+$\zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s}$
 
