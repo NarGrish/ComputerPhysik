@@ -15,16 +15,18 @@ $\zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s}$
 ```{Rcpp}
 #include <Rcpp.h>
 #include <stdio.h>
+#include <math.h>
 
 //[[Rcpp::export]]
-double zetafunktion(){
+long double zetafunktion(int genauigkeit){
     long double sum = 0;
-    for (long int i = 100000000; i > 0; i--)
+    for (long int i = pow(10,genauigkeit); i > 0; i--)
     {
-        sum += 1.0/(i*i);
+        sum += 1.0/pow(i,2);
     }
+    Rprintf("Die Zahl ergibt sich als %.15Lf .\n", sum);
     return sum;
-    Rprintf("Die Zahl ergibt sich als %LF\n", sum);
+
 }
 ```
 
@@ -33,6 +35,6 @@ Funktionsaufruf:
 
 
 ```{r}
-c = zetafunktion()
+c = zetafunktion(5)
 ```
 Der eigentliche Wert sollte: `1.644934066848226` sein. Während VSC `1.644934035302976` ausgibt.
