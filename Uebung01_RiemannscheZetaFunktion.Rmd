@@ -20,7 +20,7 @@ $\zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s}$
 //[[Rcpp::export]]
 long double zetafunktion(int genauigkeit){
     long double sum = 0;
-    for (long int i = pow(10,genauigkeit); i > 0; i--)
+    for (long int i = 10000000000; i > 0; i--)
     {
         sum += 1.0/pow(i,2);
     }
@@ -35,6 +35,88 @@ Funktionsaufruf:
 
 
 ```{r}
-c = zetafunktion(5)
+c = zetafunktion(15)
 ```
 Der eigentliche Wert sollte: `1.644934066848226` sein. Während VSC `1.644934035302976` ausgibt.
+
+Euleransatz:
+```{Rcpp}
+#include <Rcpp.h>
+#include <stdlib.h>
+#include <math.h>
+// @wikibooks "Algorithmensammlung: Statistik: Binomialkoeffizient"
+unsigned long int binomial(int n, int k){
+    if (k==0) return 1;
+    unsigned long int ergebnis;
+    if (2*k > n){
+        ergebnis = binomial(n, n-k);
+    } else {
+        ergebnis = n-k+1;
+        for (size_t i = 2; i < k+1; i++)
+        {
+            ergebnis *= (n-k+i);
+            ergebnis /= i;
+        }
+    }
+    return ergebnis;
+} 
+
+long double BernouliZahl(int n){
+    if (n == 1){
+        return -1.0/2;
+    } else if (n == 0){
+        return 1.0;
+    }
+    long double Summe = 0;
+    for (size_t k = 0; k < n; k++)
+    {
+        Summe += binomial(n+1,k) * BernouliZahl(k);
+    }
+    return (- Summe / (n+1));
+}
+
+long int factorl(int n){
+    long int fac = 1;
+    for (size_t i = 2; i < n; i++)
+    {
+        fac *= i;
+    }
+    return fac;
+}
+
+long int factorEulerMac(int s, int cut){
+    long int fact = 1; 
+    for (size_t i = 0; i < cut+1; i++)
+    {
+        fact *= s+i;
+    }
+}
+
+// @wikipedia "Berechnungsverfahren zur Riemannschen Zeta-Funktion" - Euler-Maclaurin Summenformel
+long double zetafunktionEuler(int N, int s, int p){
+    long double summe = 0;
+    // SUMME #01
+    for (size_t i = 1; i < N; i++)
+    {
+        summe += 1.0/pow(i,s);
+    }
+    // SUMMAND #02
+    summe += pow(N,(1-s))/(s-1);
+    // SUMMAND #03
+    summe += 1.0/(2*pow(N,s));
+    // SUMME #04
+    for (size_t r = 1; r < p; r++)
+    {
+        BernouliZahl(2*r)*pow(N, -s-2*r+1)*factorEulerMac(s,2*(r-1))/factorl(2*r);
+    }
+    
+    return summe;
+}
+
+long double Restglied(int s, int N, int p){
+    return ( (factorEulerMac(s,2*p-1)*BernouliZahl(2*p)*pow(N,-s-2*p+1)) / (factorl(2*p)*(s+2*p-1)) );
+}
+
+
+}
+```
