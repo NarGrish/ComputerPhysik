@@ -5,18 +5,67 @@ date: "4/14/2021"
 output: pdf_document
 ---
 
+% Pakete für mathematische Zeichen
+\usepackage{asmssymb}
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Riemannsche Zeta Funktion
-$\zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s}$
 
+## Definition der Riemmannschen Zeta Funktion
+
+Die allgemeine Definition der Reimannschen Zeta Funktion ist:
+\begin{equation}
+\zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s} , s \in \mathbb{C}
+\end{equation}
+
+Im folgenden wollen wir uns genauer mit Riemannschen Zeta Funktion von 2 beschäftigen,
+also $\zeta(2)$.
+\begin{equation}
+\zeta(2) = \sum_{k=1}^\infty \frac{1}{k^2}
+\end{equation}
+
+## Numerische Näherungsverfahren
+
+Die einfachtes Implementierung einer Näherung erfolgt durch das direkte Implementieren der Reihe über ihre Summe.
+Diese ist in der Impelmentation des naives Verfahren zu betrachten.
+Dabei stößt man jedoch schnell auf zwei große Probleme:
+
+\begin{enumerate}
+    \item Die Konvergenz der Reihe in ihrer grundlegenden Form ist nicht sehr schnell und braucht daher viele Summenschritte
+    bis ein außreichend genauer Wert erreicht wird.
+    \item Das Addieren immer kleiner Zahlen ist für den Menschen kein Problem jedoch hat der Computer nur eine begrenzte Anhalen an
+    Stellen für eine Zahl so sind die Zahlen irgendwann zu klein um auf die größere vorherige Zahl addiert zu werden. 
+    Dies ist in der Regel kein Problem da zu dem Zeitpunkt die gewünschte Genauigkeit erreicht wurde, 
+    jedoch tritt hier das Problem der langsamen Konvergenz auf durch das der Wert zu jenem Zeitpunk noch zu ungenau ist.  
+\end{enumerate}
+
+Durch diese Probleme ist die Impelmentation des naives Verfahren für unsere Zwecke zu langsam und zu ungenau.
+
+Um diese Probleme zu vermeiden kann ein Verfahren mittels alternierder Reihe nach Borwein genutzt werden.
+Da durch das alternieren der Reihe ist eine schnellere Konvergenz gegeben ist.
+
+% Quelle P. Borwein: An efficient algorithm for the Riemann zeta function. In Théra, Michel A. (ed.). Constructive, Experimental, and Nonlinear Analysis (PDF). Conference Proceedings, Canadian Mathematical Society. 27. Providence, RI: American Mathematical Society, on behalf of the Canadian Mathematical Society. pp. 29–34. ISBN 978-0-8218-2167-1.
+
+In alternierender Form lässt sich die Reihe wie folgt schreiben:
+
+\begin{equation}
+\zeta(s) = \frac{1}{1-2^{1-s}} \, \sum_{k=1}^\infty \frac{-1^{k-1}}{k^s}
+\end{equation}
+bzw. für s = 2
+\begin{equation}
+\zeta(s) = 2 \, \sum_{k=1}^\infty \frac{-1^{k-1}}{k^2}
+\end{equation}
+
+Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation der Reihe nach Borwein zufinden.
+
+# Impelmentation des naives Verfahren:
 ```{Rcpp}
 #include <Rcpp.h>
 #include <stdio.h>
 #include <math.h>
-
 //[[Rcpp::export]]
 long double zetafunktion(int genauigkeit){
     long double sum = 0;
@@ -26,17 +75,12 @@ long double zetafunktion(int genauigkeit){
     }
     Rprintf("Die Zahl ergibt sich als %.15Lf .\n", sum);
     return sum;
-
 }
 ```
 
 
-```{r, echo=FALSE}
-c = zetafunktion(15)
-```
-Der eigentliche Wert sollte: `1.644934066848226` sein. Während VSC `1.644934035302976` ausgibt.
 
-Borwein:
+# Implementation der Reihe nach Borwein 2?
 ```{Rcpp}
 #include <Rcpp.h>
 #include <math.h>
@@ -72,7 +116,7 @@ Rcpp::List borwein(int s, int N){
 }
 ```
 
-funktionierend:
+# Implementation der Reihe nach Borwein
 ```{Rcpp}
 #include <Rcpp.h>
 #include <stdio.h>
@@ -95,8 +139,34 @@ long double borwein2(int s, int N){
 }
 ```
 
+# Implementation der Reihe nach Borwein Test
+```{Rcpp}
+#include <Rcpp.h>
+#include <stdio.h>
+#include <math.h>
+
+//[[Rcpp::export]]
+long double borweinTest(int s, int N){
+    long double summe = 0;
+    long double summenext = 1;
+    long double vorzeichen = 1;
+    int k = 1;
+    while(fabs(summenext-summe)>pow(10,-16)){
+        summe += vorzeichen *pow(k,-s);
+        vorzeichen *= -1;
+        summenext = vorzeichen *pow(k+1,-s) + summe;
+        
+        k++;
+    }
+    summe /= (1-pow(2,1-s));
+    Rprintf("Das Verfahren nach Borwein scs: %.16Lf \n",summe);
+    return summe;
+}
+```
+
 
 ```{r echo=FALSE}
 x = borwein2(2, 100000000)
-x
+y = borweinTest(2, 100000000)
+
 ```
