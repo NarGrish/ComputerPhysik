@@ -3,7 +3,7 @@ title: "Übung 01: Riemannsche Zeta Funktion"
 author: "Tobias Blesgen und Leonardo Thome"
 date: "4/14/2021"
 header-includes:
-  - \usepackage{asmssymb}
+  - \usepackage{amssymb}
 output: pdf_document
 ---
 
@@ -167,6 +167,5 @@ long double borweinTest(int s, int N){
 
 ```{r echo=FALSE}
 x = borwein2(2, 100000000)
-y = borweinTest(2, 100000000)
 
 ```
