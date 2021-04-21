@@ -192,8 +192,11 @@ double borweinTestEuler(int s){
 
 ```{r echo=FALSE}
 x = borwein2(2, 100000000)
+<<<<<<< HEAD
 y = borweinTest(2)
 z = broweinTestEuler(2)
 
+=======
+>>>>>>> 3e647799960b4dca3bc0196c6e2abe428302cb5c
 
 ```
