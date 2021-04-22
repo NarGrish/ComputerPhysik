@@ -3,6 +3,7 @@ title: 'Übung 01: Riemannsche Zeta Funktion'
 author: "Tobias Blesgen und Leonardo Thome"
 date: "4/14/2021"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 header-includes: \usepackage{amssymb}
