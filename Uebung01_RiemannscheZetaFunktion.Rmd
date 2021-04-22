@@ -74,7 +74,6 @@ Rcpp::List zetafunktion(){
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
   // Quelltext
-    int s = 2;
     long double sum = 0;
     for (long int i = 1; i < 1000; i++)
     {
