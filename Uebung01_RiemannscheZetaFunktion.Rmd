@@ -65,15 +65,27 @@ Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation 
 #include <Rcpp.h>
 #include <stdio.h>
 #include <math.h>
+
+using namespace Rcpp;
+
 //[[Rcpp::export]]
-long double zetafunktion(int genauigkeit){
+Rcpp::List zetafunktion(){
+  // Array der ersten 100 Werte:
+    Rcpp::NumericVector x(100);
+    Rcpp::NumericVector y(100);
+  // Quelltext
+    int s = 2;
     long double sum = 0;
-    for (long int i = 10000000; i > 0; i--)
+    for (long int i = 0; i < 10000000; i++)
     {
         sum += 1.0/pow(i,2);
+      if(i<=100){
+          x[i] = i;
+          y[i] = sum/= (1-pow(2,1-s));
+      }
     }
     Rprintf("Die Zahl ergibt sich als %.15Lf .\n", sum);
-    return sum;
+    return List::create(Named("x") = x, Named("y") = y);
 }
 ```
 
@@ -144,8 +156,14 @@ long double borwein2(int s, int N){
 #include <stdio.h>
 #include <math.h>
 
+using namespace Rcpp;
+
 //[[Rcpp::export]]
-long double borweinTest(int s){
+Rcpp::List borweinTest(int s){
+  // Array der ersten 100 Werte:
+    Rcpp::NumericVector x(100);
+    Rcpp::NumericVector y(100);
+  // Quelltext
     long double summe = 0;
     long double summenext = 1;
     long double vorzeichen = 1;
@@ -154,12 +172,15 @@ long double borweinTest(int s){
         summe += vorzeichen *pow(k,-s);
         vorzeichen *= -1;
         summenext = vorzeichen *pow(k+1,-s) + summe;
-        
+        if(k<=100){
+          x[k-1] = k;
+          y[k-1] = summenext/= (1-pow(2,1-s));
+        }
         k++;
     }
     summe /= (1-pow(2,1-s));
     Rprintf("Das Verfahren nach Borwein scs: %.16Lf \n",summe);
-    return summe;
+    return List::create(Named("x") = x, Named("y") = y);
 }
 ```
 
@@ -170,8 +191,14 @@ long double borweinTest(int s){
 #include <stdio.h>
 #include <math.h>
 
+using namespace Rcpp;
+
 //[[Rcpp::export]]
-double borweinTestEuler(int s){
+Rcpp::List borweinTestEuler(int s){
+  // Array der ersten 100 Werte:
+    Rcpp::NumericVector x(100);
+    Rcpp::NumericVector y(100);
+  // Quelltext
     double summe = pow(1,-s)*0.5;
     double summenext = 2;
     double vorzeichen = 1;
@@ -180,23 +207,27 @@ double borweinTestEuler(int s){
         summe += vorzeichen *0.5*(pow(k,-s)-pow(k+1,-s));
         vorzeichen *= -1;
         summenext = vorzeichen* 0.5*(pow(k+1,-s)-pow(k+2,-s)) + summe;
+        if(k<=100){
+          x[k-1] = k;
+          y[k-1] = summenext/= (1-pow(2,1-s));
+        }
         k++;
+        
     }
     summe /= (1-pow(2,1-s));
     Rprintf("Schritte %d\n",k);
-    return summe;
+    Rprintf("Das Verfahren ergibt %lf", summe);
+    return List::create(Named("x") = x, Named("y") = y);
     }
 ```
 
+```{r}
+euler = borweinTestEuler(2)
+borwein = borweinTest(2)
+# naiv = zetafunktion()
 
 
-```{r echo=FALSE}
-x = borwein2(2, 100000000)
-<<<<<<< HEAD
-y = borweinTest(2)
-z = broweinTestEuler(2)
-
-=======
->>>>>>> 3e647799960b4dca3bc0196c6e2abe428302cb5c
-
+plot(euler$x, euler$y, "l", xlab = "Schritte", ylab = "der Tod", col = "dark blue")
+lines(borwein$x, borwein$y, "l", col = "dark red")
+# lines(naiv$x, naiv$y, "l", col = "green")
 ```
