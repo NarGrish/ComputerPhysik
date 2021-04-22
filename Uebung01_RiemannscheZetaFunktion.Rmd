@@ -65,7 +65,6 @@ Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation 
 # Impelmentation des naives Verfahren:
 ```{Rcpp}
 #include <Rcpp.h>
-#include <stdio.h>
 #include <math.h>
 
 using namespace Rcpp;
@@ -77,15 +76,14 @@ Rcpp::List zetafunktion(){
     Rcpp::NumericVector y(100);
   // Quelltext
     long double sum = 0;
-    for (long int i = 1; i < 1000; i++)
+    for (long int i = 1; i < 100; i++)
     {
         sum += 1.0/(i*i);
-      if(i<=100){
+      
           x[i] = i;
           y[i] = sum;
-      }
+      
     }
-    Rprintf("Die Zahl ergibt sich als %.15Lf .\n", sum);
     return List::create(Named("x") = x, Named("y") = y);
 }
 ```
@@ -93,7 +91,6 @@ Rcpp::List zetafunktion(){
 # Implementation der Reihe nach Borwein Test
 ```{Rcpp}
 #include <Rcpp.h>
-#include <stdio.h>
 #include <math.h>
 
 using namespace Rcpp;
@@ -128,7 +125,6 @@ Rcpp::List borweinTest(int s){
 # Implementation der Reihe nach Borwein Euler
 ```{Rcpp}
 #include <Rcpp.h>
-#include <stdio.h>
 #include <math.h>
 
 using namespace Rcpp;
@@ -167,7 +163,7 @@ Rcpp::List borweinTestEuler(int s){
 ```{r, echo=FALSE}
 euler = borweinTestEuler(2)
 borwein = borweinTest(2)
-#naiv = zetafunktion()
+naiv = zetafunktion()
 
 ```
 
@@ -176,14 +172,14 @@ borwein = borweinTest(2)
 ```{r, echo=FALSE}
 plot(borwein$x, borwein$y, "l", xlab = "Schritte", ylab = "Näherungswert", col = "dark blue")
 lines(euler$x, euler$y, "l", col = "red")
-#lines(naiv$x, naiv$y, "l", col = "green")
+lines(naiv$x, naiv$y, "l", col = "green")
 legend(70,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
 ```{r, echo=FALSE}
 
 plot(borwein$x, abs(borwein$y - 1.6449340668482266), "l", xlab = "Schritte", ylab = "absolute Abweichung", col = "dark blue")
-#lines(naiv$x, abs(naiv$y - 1.6449340668482266), "l", col = "green")
+lines(naiv$x, abs(naiv$y - 1.6449340668482266), "l", col = "green")
 lines(borwein$x, abs(euler$y - 1.6449340668482266), "l", col = "red")
 legend(70,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
