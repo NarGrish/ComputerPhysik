@@ -1,10 +1,11 @@
 ---
-title: "Übung 01: Riemannsche Zeta Funktion"
+title: 'Übung 01: Riemannsche Zeta Funktion'
 author: "Tobias Blesgen und Leonardo Thome"
 date: "4/14/2021"
-header-includes:
-  - \usepackage{amssymb}
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
+header-includes: \usepackage{amssymb}
 ---
 
 ```{r setup, include=FALSE}
@@ -159,27 +160,29 @@ Rcpp::List borweinTestEuler(int s){
     }
 ```
 
-```{r}
+
+
+
+```{r, echo=FALSE}
 euler = borweinTestEuler(2)
 borwein = borweinTest(2)
+#naiv = zetafunktion()
 
 ```
 
-```{r}
-naiv = zetafunktion()
-```
 
-```{r, echo = FALSE}
+
+```{r, echo=FALSE}
 plot(borwein$x, borwein$y, "l", xlab = "Schritte", ylab = "Näherungswert", col = "dark blue")
 lines(euler$x, euler$y, "l", col = "red")
-lines(naiv$x, naiv$y, "l", col = "green")
+#lines(naiv$x, naiv$y, "l", col = "green")
 legend(70,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
-```{r, echo = FALSE}
+```{r, echo=FALSE}
 
 plot(borwein$x, abs(borwein$y - 1.6449340668482266), "l", xlab = "Schritte", ylab = "absolute Abweichung", col = "dark blue")
-lines(naiv$x, abs(naiv$y - 1.6449340668482266), "l", col = "green")
+#lines(naiv$x, abs(naiv$y - 1.6449340668482266), "l", col = "green")
 lines(borwein$x, abs(euler$y - 1.6449340668482266), "l", col = "red")
 legend(70,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
