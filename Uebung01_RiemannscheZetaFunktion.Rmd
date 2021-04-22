@@ -89,67 +89,6 @@ Rcpp::List zetafunktion(){
 }
 ```
 
-
-
-# Implementation der Reihe nach Borwein 2?
-```{Rcpp}
-#include <Rcpp.h>
-#include <math.h>
-#include <stdio.h>
-
-using namespace Rcpp;
-
-//[[Rcpp::export]]
-Rcpp::List borwein(int s, int N){
-    // Werte vector
-    Rcpp::NumericVector Werte(N*2+1);
-    // Algorithmus
-    
-    Werte[0] = 0.0;
-    
-    for (int k = 1; k < N; k+=2)
-    {
-        Werte[k+1] = Werte[k]+pow(k,-s);
-        
-    }
-    for (int k = 2; k < N; k+=2)
-    {
-        Werte[N+k+1] = Werte[N+k] - pow(k,-s);
-    }
-    
-    int skalierung = 1-pow(2,1-s);
-    for (int i = 0; i< 2*N+1; i++){
-        Werte[i] = Werte[i]/skalierung;
-    }
-    Rprintf("Das Verfahren nach Borwein ergibt: %.16f \n",Werte[2*N]);
-    Rprintf("Fuck\n");
-    return List::create(Named("Werte") = Werte);
-}
-```
-
-# Implementation der Reihe nach Borwein
-```{Rcpp}
-#include <Rcpp.h>
-#include <stdio.h>
-#include <math.h>
-
-//[[Rcpp::export]]
-long double borwein2(int s, int N){
-    long double summe1 = 0;
-    for (int k = 1; k < N; k+=2)
-    {
-        summe1 += pow(k,-s);
-    }
-    for (int k = 2; k < N; k+=2)
-    {
-        summe1 -= pow(k,-s);
-    }
-    summe1/= (1-pow(2,1-s));
-    Rprintf("Das Verfahren nach Borwein scs: %.16Lf \n",summe1);
-    return summe1;
-}
-```
-
 # Implementation der Reihe nach Borwein Test
 ```{Rcpp}
 #include <Rcpp.h>
