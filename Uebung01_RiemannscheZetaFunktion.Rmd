@@ -76,12 +76,12 @@ Rcpp::List zetafunktion(){
   // Quelltext
     int s = 2;
     long double sum = 0;
-    for (long int i = 0; i < 10000000; i++)
+    for (long int i = 1; i < 1000; i++)
     {
-        sum += 1.0/pow(i,2);
+        sum += 1.0/(i*i);
       if(i<=100){
           x[i] = i;
-          y[i] = sum/= (1-pow(2,1-s));
+          y[i] = sum;
       }
     }
     Rprintf("Die Zahl ergibt sich als %.15Lf .\n", sum);
@@ -113,12 +113,12 @@ Rcpp::List borweinTest(int s){
         summenext = vorzeichen *pow(k+1,-s) + summe;
         if(k<=100){
           x[k-1] = k;
-          y[k-1] = summenext/= (1-pow(2,1-s));
+          y[k-1] = summenext/ (1-pow(2,1-s));
         }
         k++;
     }
     summe /= (1-pow(2,1-s));
-    Rprintf("Das Verfahren nach Borwein scs: %.16Lf \n",summe);
+    Rprintf("Das Verfahren nach Borwein: %.16Lf \n",summe);
     return List::create(Named("x") = x, Named("y") = y);
 }
 ```
@@ -148,14 +148,14 @@ Rcpp::List borweinTestEuler(int s){
         summenext = vorzeichen* 0.5*(pow(k+1,-s)-pow(k+2,-s)) + summe;
         if(k<=100){
           x[k-1] = k;
-          y[k-1] = summenext/= (1-pow(2,1-s));
+          y[k-1] = summenext/ (1-pow(2,1-s));
         }
         k++;
         
     }
     summe /= (1-pow(2,1-s));
     Rprintf("Schritte %d\n",k);
-    Rprintf("Das Verfahren ergibt %lf", summe);
+    Rprintf("Das Verfahren ergibt %lf\n", summe);
     return List::create(Named("x") = x, Named("y") = y);
     }
 ```
@@ -163,10 +163,25 @@ Rcpp::List borweinTestEuler(int s){
 ```{r}
 euler = borweinTestEuler(2)
 borwein = borweinTest(2)
-# naiv = zetafunktion()
 
+```
 
-plot(euler$x, euler$y, "l", xlab = "Schritte", ylab = "der Tod", col = "dark blue")
-lines(borwein$x, borwein$y, "l", col = "dark red")
-# lines(naiv$x, naiv$y, "l", col = "green")
+```{r}
+naiv = zetafunktion()
+```
+
+```{r, echo = FALSE}
+plot(borwein$x, borwein$y, "l", xlab = "Schritte", ylab = "Näherungswert", col = "dark blue")
+lines(euler$x, euler$y, "l", col = "red")
+lines(naiv$x, naiv$y, "l", col = "green")
+legend(70,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
+
+```
+```{r, echo = FALSE}
+
+plot(borwein$x, abs(borwein$y - 1.6449340668482266), "l", xlab = "Schritte", ylab = "absolute Abweichung", col = "dark blue")
+lines(naiv$x, abs(naiv$y - 1.6449340668482266), "l", col = "green")
+lines(borwein$x, abs(euler$y - 1.6449340668482266), "l", col = "red")
+legend(70,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
+
 ```
