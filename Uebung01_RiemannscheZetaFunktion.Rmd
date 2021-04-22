@@ -63,32 +63,34 @@ bzw. für s = 2
 Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation der Reihe nach Borwein zufinden.
 
 # Impelmentation des naives Verfahren:
+Das naive Verfahren konvergiert nur sehr langsam. Da wir es hier nur nutzen um später die ersten 100 Schritte grafisch mit den anderen Verfahren vergleichen zu können, laufen wir an dieser Steller auch nur über diese ersten 100 Summenglieder, um unnötige Wartezeiten zu vermeiden.
 ```{Rcpp}
 #include <Rcpp.h>
-#include <math.h>
 
 using namespace Rcpp;
 
 //[[Rcpp::export]]
-Rcpp::List zetafunktion(){
+Rcpp::List naiveZetafunktion(){
   // Array der ersten 100 Werte:
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
   // Quelltext
     long double sum = 0;
-    for (long int i = 1; i < 100; i++)
+    for (int i = 1; i < 100; i++)
     {
         sum += 1.0/(i*i);
-      
+        
+        // Einsammeln der ersten 100 Werte
           x[i] = i;
           y[i] = sum;
       
     }
+    // Rückgabe für eine grafische Wiedergabe
     return List::create(Named("x") = x, Named("y") = y);
 }
 ```
 
-# Implementation der Reihe nach Borwein Test
+# Implementation der Reihe nach Borwein
 ```{Rcpp}
 #include <Rcpp.h>
 #include <math.h>
@@ -96,7 +98,7 @@ Rcpp::List zetafunktion(){
 using namespace Rcpp;
 
 //[[Rcpp::export]]
-Rcpp::List borweinTest(int s){
+Rcpp::List borwein(int s){
   // Array der ersten 100 Werte:
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
@@ -109,6 +111,7 @@ Rcpp::List borweinTest(int s){
         summe += vorzeichen *pow(k,-s);
         vorzeichen *= -1;
         summenext = vorzeichen *pow(k+1,-s) + summe;
+        // Einsammeln der ersten 100 Werte
         if(k<=100){
           x[k-1] = k;
           y[k-1] = summenext/ (1-pow(2,1-s));
@@ -117,6 +120,7 @@ Rcpp::List borweinTest(int s){
     }
     summe /= (1-pow(2,1-s));
     Rprintf("Das Verfahren nach Borwein: %.16Lf \n",summe);
+    // Rückgabe für eine grafische Wiedergabe
     return List::create(Named("x") = x, Named("y") = y);
 }
 ```
@@ -143,6 +147,7 @@ Rcpp::List borweinTestEuler(int s){
         summe += vorzeichen *0.5*(pow(k,-s)-pow(k+1,-s));
         vorzeichen *= -1;
         summenext = vorzeichen* 0.5*(pow(k+1,-s)-pow(k+2,-s)) + summe;
+        // Einsammeln der ersten 100 Werte
         if(k<=100){
           x[k-1] = k;
           y[k-1] = summenext/ (1-pow(2,1-s));
@@ -151,8 +156,8 @@ Rcpp::List borweinTestEuler(int s){
         
     }
     summe /= (1-pow(2,1-s));
-    Rprintf("Schritte %d\n",k);
-    Rprintf("Das Verfahren ergibt %lf\n", summe);
+    Rprintf("Das Verfahren nach Bohrwein nach Gauss verbessert ergibt %.16lf\n", summe);
+    // Rückgabe für eine grafische Wiedergabe
     return List::create(Named("x") = x, Named("y") = y);
     }
 ```
@@ -162,8 +167,8 @@ Rcpp::List borweinTestEuler(int s){
 
 ```{r, echo=FALSE}
 euler = borweinTestEuler(2)
-borwein = borweinTest(2)
-naiv = zetafunktion()
+borwein = borwein(2)
+naiv = naiveZetafunktion()
 
 ```
 
@@ -173,7 +178,7 @@ naiv = zetafunktion()
 plot(borwein$x, borwein$y, "l", xlab = "Schritte", ylab = "Näherungswert", col = "dark blue")
 lines(euler$x, euler$y, "l", col = "red")
 lines(naiv$x, naiv$y, "l", col = "green")
-legend(70,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
+legend(55,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
 ```{r, echo=FALSE}
@@ -181,6 +186,6 @@ legend(70,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "d
 plot(borwein$x, abs(borwein$y - 1.6449340668482266), "l", xlab = "Schritte", ylab = "absolute Abweichung", col = "dark blue")
 lines(naiv$x, abs(naiv$y - 1.6449340668482266), "l", col = "green")
 lines(borwein$x, abs(euler$y - 1.6449340668482266), "l", col = "red")
-legend(70,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
+legend(55,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
