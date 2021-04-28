@@ -48,9 +48,7 @@ Durch diese Probleme ist die Impelmentation des naives Verfahren für unsere Zwe
 Um diese Probleme zu vermeiden kann ein Verfahren mittels alternierder Reihe nach Borwein genutzt werden.
 Da durch das alternieren der Reihe ist eine schnellere Konvergenz gegeben ist.
 
-\footnote{Quelle: P. Borwein: An efficient algorithm for the Riemann zeta function. In Théra, Michel A. (ed.). Constructive, Experimental, and Nonlinear Analysis (PDF). Conference Proceedings, Canadian Mathematical Society. 27. Providence, RI: American Mathematical Society, on behalf of the Canadian Mathematical Society. pp. 29–34. ISBN 978-0-8218-2167-1.}
-
-In alternierender Form lässt sich die Reihe wie folgt schreiben:
+In alternierender Form\footnote{Quelle: P. Borwein: An efficient algorithm for the Riemann zeta function. In Théra, Michel A. (ed.). Constructive, Experimental, and Nonlinear Analysis (PDF). Conference Proceedings, Canadian Mathematical Society. 27. Providence, RI: American Mathematical Society, on behalf of the Canadian Mathematical Society. pp. 29–34. ISBN 978-0-8218-2167-1.} lässt sich die Reihe wie folgt schreiben:
 
 \begin{equation}
     \zeta(s) = \frac{1}{1-2^{1-s}} \, \sum_{k=1}^\infty \frac{-1^{k-1}}{k^s}
@@ -195,6 +193,8 @@ lines(naiv$x, naiv$y, "l", col = "green")
 legend(55,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
+Um nun das Konvergenzverhalten besser betrachten zu können, können wir uns direkt die Differenz zum Endwert grafisch darstellen lassen:
+
 ```{r, echo=FALSE}
 
 plot(borwein$x, abs(borwein$y - 1.6449340668482266), "l", xlab = "Schritte", ylab = "absolute Abweichung", col = "dark blue")
@@ -203,3 +203,4 @@ lines(borwein$x, abs(euler$y - 1.6449340668482266), "l", col = "red")
 legend(55,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
+Es wird deutlich, dass der das naive Summenverfahren deutlich länger als die beiden Implementationen nach Borwein braucht um gute Ergebnisser zu liefern.
