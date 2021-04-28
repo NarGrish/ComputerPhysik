@@ -76,7 +76,7 @@ Für unseren Fall:
 
 Und somit unsere neue Summe:
 \begin{equation}
-    \zeta(s) = 2 * (0.5 +\, \sum_{k=2}^\infty \frac{1}{k^2}+\frac{1}{(k-1)^2})
+    \zeta(s) = 2 * (0.5 +\, \sum_{k=2}^\infty \frac{1}{k^2}-\frac{1}{(k-1)^2})
 \end{equation}
 
 
@@ -157,7 +157,7 @@ Rcpp::List BorweinEuler(int s){
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
   // Quelltext
-    double summe = 0; //hälfte des ersten Glieds 
+    double summe = pow(1,-s)*0.5; //hälfte des ersten Glieds 
     double summenext = 2;
     double vorzeichen = -1;
     int k = 2;
@@ -173,7 +173,6 @@ Rcpp::List BorweinEuler(int s){
         k++;
         
     }
-    summe += pow(1,-s)*0.5;
     summe /= (1-pow(2,1-s));
     Rprintf("Das Verfahren nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung ergibt %.16lf\n", summe);
     // Rückgabe für eine grafische Wiedergabe
