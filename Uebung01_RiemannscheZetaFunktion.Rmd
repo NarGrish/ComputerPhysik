@@ -181,16 +181,12 @@ Rcpp::List BorweinEuler(int s){
 ```
 
 
-
-
 ```{r, echo=FALSE}
 euler = BorweinEuler(2)
 borwein = borwein(2)
 naiv = naiveZetafunktion()
 
 ```
-
-
 
 ```{r, echo=FALSE}
 plot(borwein$x, borwein$y, "l", xlab = "Schritte", ylab = "Näherungswert", col = "dark blue")
