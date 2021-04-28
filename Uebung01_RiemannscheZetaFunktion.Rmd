@@ -1,7 +1,7 @@
 ---
 title: 'Übung 01: Riemannsche Zeta Funktion'
 author: "Tobias Blesgen und Leonardo Thome"
-date: "4/14/2021"
+date: "28.04.2021"
 output:
   pdf_document: default
   html_document:
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Die allgemeine Definition der Reimannschen Zeta Funktion ist:
 \begin{equation}
-    \zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s} , s \in \mathbb{C} \\ {0}
+    \zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s} , s \in \mathbb{C} \\\\ \{0\}
 \end{equation}
 
 Im folgenden wollen wir uns genauer mit Riemannschen Zeta Funktion von 2 beschäftigen,
@@ -48,7 +48,7 @@ Durch diese Probleme ist die Impelmentation des naives Verfahren für unsere Zwe
 Um diese Probleme zu vermeiden kann ein Verfahren mittels alternierder Reihe nach Borwein genutzt werden.
 Da durch das alternieren der Reihe ist eine schnellere Konvergenz gegeben ist.
 
-Quelle: P. Borwein: An efficient algorithm for the Riemann zeta function. In Théra, Michel A. (ed.). Constructive, Experimental, and Nonlinear Analysis (PDF). Conference Proceedings, Canadian Mathematical Society. 27. Providence, RI: American Mathematical Society, on behalf of the Canadian Mathematical Society. pp. 29–34. ISBN 978-0-8218-2167-1.
+\footnote{Quelle: P. Borwein: An efficient algorithm for the Riemann zeta function. In Théra, Michel A. (ed.). Constructive, Experimental, and Nonlinear Analysis (PDF). Conference Proceedings, Canadian Mathematical Society. 27. Providence, RI: American Mathematical Society, on behalf of the Canadian Mathematical Society. pp. 29–34. ISBN 978-0-8218-2167-1.}
 
 In alternierender Form lässt sich die Reihe wie folgt schreiben:
 
@@ -62,8 +62,26 @@ bzw. für s = 2
 
 Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation der Reihe nach Borwein zufinden.
 
+Da wir eine Genauigkeit von 15 Dezimalstellen haben wollen hat die Reihe nach Borwein zwar eine vertrettbare, aber denoch recht lange Laufzeit.
+Zum verkürzen der Laufzeit wenden wir das Eulersche Verfahren zur Mittelwertbildung auf unsere alternierende Reihe an.
+Dabei werden die einzelnen Reihenglieder durch den Mittelwert des Reihenglieds selber und des nächsten Reihenglieds ersetzt.
+
+\begin{equation}
+    S_k' = \frac{1}{2}*(S_k +S_{n+1})
+\end{equation}
+Für unseren Fall:
+\begin{equation}
+    S_k' = (-1)^{k-1}\frac{1}{2}(\frac{1}{k^2}+\frac{1}{(k+1)^2})
+\end{equation}
+
+Und somit unsere neue Summe:
+\begin{equation}
+    \zeta(s) = 2 * (0.5 +\, \sum_{k=1}^\infty \frac{1}{k^2}+\frac{1}{(k+1)^2})
+\end{equation}
+
+
 # Impelmentation des naives Verfahren:
-Das naive Verfahren konvergiert nur sehr langsam. Da wir es hier nur nutzen um später die ersten 100 Schritte grafisch mit den anderen Verfahren vergleichen zu können, laufen wir an dieser Steller auch nur über diese ersten 100 Summenglieder, um unnötige Wartezeiten zu vermeiden.
+Das naive Verfahren konvergiert nur sehr langsam. Da wir es hier nur nutzen um später die ersten 100 Schritte grafisch mit den anderen Verfahren vergleichen zu können, laufen wir an dieser Stelle auch nur über diese ersten 100 Summenglieder, um unnötige Wartezeiten zu vermeiden.
 ```{Rcpp}
 #include <Rcpp.h>
 
@@ -126,7 +144,7 @@ Rcpp::List borwein(int s){
 ```
 
 
-# Implementation der Reihe nach Borwein Euler
+# Implementation der Reihe nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung
 ```{Rcpp}
 #include <Rcpp.h>
 #include <math.h>
@@ -134,16 +152,16 @@ Rcpp::List borwein(int s){
 using namespace Rcpp;
 
 //[[Rcpp::export]]
-Rcpp::List borweinTestEuler(int s){
+Rcpp::List BorweinEuler(int s){
   // Array der ersten 100 Werte:
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
   // Quelltext
-    double summe = pow(1,-s)*0.5;
+    double summe = 0; //hälfte des ersten Glieds 
     double summenext = 2;
     double vorzeichen = 1;
     int k = 1;
-    while(fabs(summenext-summe)>pow(10,-16)){
+    while(fabs(summenext-summe)>pow(10,-15)){
         summe += vorzeichen *0.5*(pow(k,-s)-pow(k+1,-s));
         vorzeichen *= -1;
         summenext = vorzeichen* 0.5*(pow(k+1,-s)-pow(k+2,-s)) + summe;
@@ -155,8 +173,9 @@ Rcpp::List borweinTestEuler(int s){
         k++;
         
     }
+    summe += pow(1,-s)*0.5
     summe /= (1-pow(2,1-s));
-    Rprintf("Das Verfahren nach Bohrwein nach Gauss verbessert ergibt %.16lf\n", summe);
+    Rprintf("Das Verfahren nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung ergibt %.16lf\n", summe);
     // Rückgabe für eine grafische Wiedergabe
     return List::create(Named("x") = x, Named("y") = y);
     }
@@ -166,7 +185,7 @@ Rcpp::List borweinTestEuler(int s){
 
 
 ```{r, echo=FALSE}
-euler = borweinTestEuler(2)
+euler = BorweinEuler(2)
 borwein = borwein(2)
 naiv = naiveZetafunktion()
 
