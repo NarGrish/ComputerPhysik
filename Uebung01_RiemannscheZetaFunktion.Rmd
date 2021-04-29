@@ -24,7 +24,7 @@ Die allgemeine Definition der Reimannschen Zeta Funktion ist:
     \zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s} , s \in \mathbb{C} \textbackslash  \{0\}
 \end{equation}
 
-Im folgenden wollen wir uns genauer mit Riemannschen Zeta Funktion von 2 beschäftigen,
+Im Folgenden wollen wir uns genauer mit der Riemannschen Zeta Funktion von 2 beschäftigen,
 also $\zeta(2)$.
 \begin{equation}
 \zeta(2) = \sum_{k=1}^\infty \frac{1}{k^2}
@@ -32,8 +32,8 @@ also $\zeta(2)$.
 
 ## Konvergenzverhalten der Riemannschen Zeta Funktion
 
-Für die Konvergenz bzw. das Konvergenzverhalten der Riemannschen Zeta Funktion betracheten wir den Wert von: 
-$\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$ , mit den Reihengliedern $s_k = \frac{1}{k^2}$, bzw $s_{k+1}= \frac{1}{(k+1)^2}$  und dem bekanntem Grenzwert $s = \frac{\pi^2}{6}$ \footnote{J.-P. Serre: A course in arithmetic, Springer-Verlag New York (1973), ISBN 978-0-387-90040-7, S. 91.}.
+Für die Konvergenz bzw. das Konvergenzverhalten der Riemannschen Zeta Funktion betrachten wir den Wert von: 
+$\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$  mit den Reihengliedern $s_k = \frac{1}{k^2}$, bzw $s_{k+1}= \frac{1}{(k+1)^2}$  und dem bekannten Grenzwert $s = \frac{\pi^2}{6}$ \footnote{J.-P. Serre: A course in arithmetic, Springer-Verlag New York (1973), ISBN 978-0-387-90040-7, S. 91.}.
 
 \begin{align*}
     \limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1}{(k+1)}-s}{\frac{1}{k^2}-s}|) \\
@@ -44,28 +44,28 @@ $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$ , mit den Rei
       &= 1
 \end{align*}
 
-Da nun $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) = 1$ ist handelt es sich um ein unterlineares Konvergenzverhalten, somit konvergiert die Reihe langsamer als linear.
+Da nun $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) = 1$ ist, handelt es sich um ein unterlineares Konvergenzverhalten, somit konvergiert die Reihe langsamer als linear.
 
 
 ## Numerische Näherungsverfahren
 
-Die einfachtes Implementierung einer Näherung erfolgt durch das direkte Implementieren der Reihe über ihre Summe.
-Diese ist in der Impelmentation des naives Verfahren zu betrachten.
+Die einfachste Implementierung einer Näherung erfolgt durch das direkte Implementieren der Reihe über ihre Summe.
+Diese ist in der Implementation des naiven Verfahrens zu betrachten.
 Dabei stößt man jedoch schnell auf zwei große Probleme:
 
 \begin{enumerate}
-    \item Die Konvergenz der Reihe in ihrer grundlegenden Form ist nicht sehr schnell und braucht daher viele Summenschritte
-    bis ein außreichend genauer Wert erreicht wird.
-    \item Das Addieren immer kleiner Zahlen ist für den Menschen kein Problem jedoch hat der Computer nur eine begrenzte Anhalen an
-    Stellen für eine Zahl so sind die Zahlen irgendwann zu klein um auf die größere vorherige Zahl addiert zu werden. 
-    Dies ist in der Regel kein Problem da zu dem Zeitpunkt die gewünschte Genauigkeit erreicht wurde, 
-    jedoch tritt hier das Problem der langsamen Konvergenz auf durch das der Wert zu jenem Zeitpunk noch zu ungenau ist.  
+    \item Die Konvergenz der Reihe in ihrer grundlegenden Form ist nicht sehr schnell und braucht daher viele Summenschritte,
+    bis ein ausreichend genauer Wert erreicht wird.
+    \item Das Addieren immer kleiner werdenden Zahlen ist für den Menschen kein Problem, jedoch hat der Computer nur eine begrenzte Anzahl an
+    Stellen für eine Zahl. So sind die Zahlen irgendwann zu klein, um auf die größere vorherige Zahl addiert zu werden. 
+    Dies ist in der Regel kein Problem, da zu dem Zeitpunkt die gewünschte Genauigkeit erreicht wurde. 
+    Jedoch tritt das Problem der langsamen Konvergenz auf, durch das der Wert zu jenem Zeitpunkt noch zu ungenau ist.  
 \end{enumerate}
 
-Durch diese Probleme ist die Impelmentation des naives Verfahren für unsere Zwecke zu langsam und zu ungenau.
+Durch diese Probleme ist die Implementation des naiven Verfahrens für unsere Zwecke zu langsam und zu ungenau.
 
-Um diese Probleme zu vermeiden kann ein Verfahren mittels alternierder Reihe nach Borwein genutzt werden.
-Da durch das alternieren der Reihe ist eine schnellere Konvergenz gegeben ist.
+Um diese Probleme zu vermeiden, kann ein Verfahren mittels alternierender Reihe nach Borwein genutzt werden.
+Durch das Alternieren der Reihe eine schnellere Konvergenz gegeben ist.
 
 In alternierender Form\footnote{Quelle: P. Borwein: An efficient algorithm for the Riemann zeta function. In Théra, Michel A. (ed.). Constructive, Experimental, and Nonlinear Analysis (PDF). Conference Proceedings, Canadian Mathematical Society. 27. Providence, RI: American Mathematical Society, on behalf of the Canadian Mathematical Society. pp. 29–34. ISBN 978-0-8218-2167-1.} lässt sich die Reihe wie folgt schreiben:
 
@@ -74,14 +74,14 @@ In alternierender Form\footnote{Quelle: P. Borwein: An efficient algorithm for t
 \end{equation}
 bzw. für s = 2
 \begin{equation}
-    \zeta(s) = 2 \, \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k^2}
+    \zeta(2) = 2 \, \sum_{k=1}^\infty \frac{(-1)^{k-1}}{k^2}
 \end{equation}
 
-Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation der Reihe nach Borwein zufinden.
+Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation der Reihe nach Borwein zu finden.
 
-Da wir eine Genauigkeit von 15 Dezimalstellen haben wollen hat die Reihe nach Borwein zwar eine vertrettbare, aber denoch recht lange Laufzeit.
-Zum verkürzen der Laufzeit wenden wir das Eulersche Verfahren zur Mittelwertbildung auf unsere alternierende Reihe an.
-Dabei werden die einzelnen Reihenglieder durch den Mittelwert des Reihenglieds selber und dem vorherigen Reihenglieds ersetzt, zu beachten ist das wir zufor das erste Reihenglied bestimmen und aus der Summe ziehen müssen um nicht durch 0 zu teilen.
+Da wir eine Genauigkeit von 15 Dezimalstellen haben wollen, hat die Reihe nach Borwein zwar eine vertretbare, aber denoch recht lange Laufzeit.
+Zum Verkürzen der Laufzeit wenden wir das Eulersche Verfahren zur Mittelwertbildung auf unsere alternierende Reihe an.
+Dabei werden die einzelnen Reihenglieder durch den Mittelwert des Reihenglieds selber und des vorherigen Reihenglieds ersetzt. Zu beachten ist, dass wir zuvor das erste Reihenglied bestimmen und aus der Summe ziehen müssen, um nicht durch 0 zu teilen.
 
 \begin{equation}
     S_k' = \frac{1}{2}*(S_k +S_{k-1})
@@ -93,17 +93,17 @@ Für unseren Fall:
 
 Und somit unsere neue Summe:
 \begin{equation}
-    \zeta(s) = 2 * (0.5 +\, \sum_{k=2}^\infty \frac{1}{k^2}-\frac{1}{(k-1)^2})
+    \zeta(2) = 2 * (0.5 +\, \sum_{k=2}^\infty \frac{1}{k^2}-\frac{1}{(k-1)^2})
 \end{equation}
 
-Durch die Impementierung in Implementation der Reihe nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung können wir die Reihe nun neu bestimmen.
-Dabei fällt auf das zwar die laufzeit wesendlich kürzer ist, jedoch wir ein nur noch auf 13 Dezimalstellen genaues Ergebnis erhalten,
-da dies der Problemstellung nicht genügt ist die Reihe nach Borwein die best gefundenste Lösung.
-Bei einer Probelmstellung wo die lautzeit relavant wird und eine Genauigkeit von 13 Dezimalstellen genügen, würde sich die Reihe nach Borwein mit Mittelwertbildung nach Euler anbieten.
+Durch die Implementierung der Reihe nach Borwein mit dem Eulerschen Verfahren zur Mittelwertbildung können wir die Reihe nun neu bestimmen.
+Dabei fällt auf, dass zwar die Laufzeit wesentlich kürzer ist, jedoch wir ein nur noch auf 13 Dezimalstellen genaues Ergebnis erhalten.
+Da dies der Problemstellung nicht genügt, ist die Reihe nach Borwein die beste Lösung, die wir gefunden haben.
+Bei einer Problemstellung, bei der die Laufzeit relevant wird und eine Genauigkeit von 13 Dezimalstellen genügt, würde sich die Reihe nach Borwein mit Mittelwertbildung nach Euler anbieten.
 
 
-# Impelmentation des naives Verfahren:
-Das naive Verfahren konvergiert nur sehr langsam. Da wir es hier nur nutzen um später die ersten 100 Schritte grafisch mit den anderen Verfahren vergleichen zu können, laufen wir an dieser Stelle auch nur über diese ersten 100 Summenglieder, um unnötige Wartezeiten zu vermeiden.
+# Implementation des naiven Verfahrens:
+Das naive Verfahren konvergiert nur sehr langsam. Da wir es hier nur nutzen, um später die ersten 100 Schritte grafisch mit den anderen Verfahren vergleichen zu können, laufen wir an dieser Stelle auch nur über diese ersten 100 Summenglieder, um unnötige Wartezeiten zu vermeiden.
 ```{Rcpp}
 #include <Rcpp.h>
 
@@ -179,7 +179,7 @@ Rcpp::List BorweinEuler(int s){
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
   // Quelltext
-    double summe = pow(1,-s)*0.5; //hälfte des ersten Glieds 
+    double summe = pow(1,-s)*0.5; // Hälfte des ersten Glieds 
     double summenext = 2;
     double vorzeichen = -1;
     int k = 2;
@@ -197,7 +197,7 @@ Rcpp::List BorweinEuler(int s){
     }
     summe /= (1-pow(2,1-s));
     Rprintf(
-      "Das Verfahren nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung \n ergibt %.16lf\n"
+      "Das Verfahren mit der Eulerschen Mittelwertbildung ergibt \n %.16lf\n"
       , summe);
     // Rückgabe für eine grafische Wiedergabe
     return List::create(Named("x") = x, Named("y") = y);
@@ -231,4 +231,4 @@ legend(55,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "d
 
 ```
 
-Es wird deutlich, dass der das naive Summenverfahren deutlich länger als die beiden Implementationen nach Borwein braucht um gute Ergebnisser zu liefern.
+Es fällt auf, dass das naive Summenverfahren deutlich länger als die beiden Implementationen nach Borwein braucht, um gute Ergebnisse zu liefern.
