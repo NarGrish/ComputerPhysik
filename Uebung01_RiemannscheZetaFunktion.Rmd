@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Die allgemeine Definition der Reimannschen Zeta Funktion ist:
 \begin{equation}
-    \zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s} , s \in \mathbb{C} \\\\ \{0\}
+    \zeta(s) = \sum_{k=1}^\infty \frac{1}{k^s} , s \in \mathbb{C} \textbackslash  \{0\}
 \end{equation}
 
 Im folgenden wollen wir uns genauer mit Riemannschen Zeta Funktion von 2 beschäftigen,
@@ -38,7 +38,7 @@ $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$ , mit den Rei
 \begin{align*}
     \limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1}{(k+1)}-s}{\frac{1}{k^2}-s}|) \\
       &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1-(k+1)^2s}{(k+1)^2}}{\frac{1-k^2s}{k^2}}|)\\
-      &= \limsup\limits_{k\rightarrow\infty}(|\frac{k^2-k^2(k+1)^2s}{(k+1)^2-k^2(k+1)^2s}|) \,\,\,\, \mathrm{, zwei mal l'Hospital}\\
+      &= \limsup\limits_{k\rightarrow\infty}(|\frac{k^2-k^2(k+1)^2s}{(k+1)^2-k^2(k+1)^2s}|) \,\,\,\, \mathrm{, zwei \, mal \, l'Hospital}\\
       &= \limsup\limits_{k\rightarrow\infty}(|\frac{2-12k^2s-12ks-2s}{2-12k^2s-12ks-2s}|)\\
       &= \limsup\limits_{k\rightarrow\infty}(|1|) \\
       &= 1
@@ -84,7 +84,7 @@ Zum verkürzen der Laufzeit wenden wir das Eulersche Verfahren zur Mittelwertbil
 Dabei werden die einzelnen Reihenglieder durch den Mittelwert des Reihenglieds selber und dem vorherigen Reihenglieds ersetzt, zu beachten ist das wir zufor das erste Reihenglied bestimmen und aus der Summe ziehen müssen um nicht durch 0 zu teilen.
 
 \begin{equation}
-    S_k' = \frac{1}{2}*(S_k +S_{n+1})
+    S_k' = \frac{1}{2}*(S_k +S_{k-1})
 \end{equation}
 Für unseren Fall:
 \begin{equation}
@@ -219,6 +219,7 @@ lines(naiv$x, naiv$y, "l", col = "green")
 legend(55,1.57,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
+
 Um nun das Konvergenzverhalten besser betrachten zu können, können wir uns direkt die Differenz zum Endwert grafisch darstellen lassen:
 
 ```{r, echo=FALSE}
