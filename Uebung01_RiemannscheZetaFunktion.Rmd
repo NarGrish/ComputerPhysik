@@ -35,14 +35,14 @@ also $\zeta(2)$.
 Für die Konvergenz bzw. das Konvergenzverhalten der Riemannschen Zeta Funktion betracheten wir den Wert von: 
 $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$ , mit den Reihengliedern $s_k = \frac{1}{k^2}$, bzw $s_{k+1}= \frac{1}{(k+1)^2}$  und dem bekanntem Grenzwert $s = \frac{\pi^2}{6}$ \footnote{J.-P. Serre: A course in arithmetic, Springer-Verlag New York (1973), ISBN 978-0-387-90040-7, S. 91.}.
 
-\begin{align}
-    \limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1}{k^2}-s}{\frac{1}{(k+1)^2}-s}|) \\
-      &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1-(k+1)^2s}{(k+1)^2}}{\frac{1-k^2s}{(k^2}}|)\\
-      &= \limsup\limits_{k\rightarrow\infty}(|\frac{k^2-k^2(k+1)^2s}{(k+1)^2-k^2(k+1)^2s}|)  , l'Hospital\\
+\begin{align*}
+    \limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1}{(k+1)}-s}{\frac{1}{k^2}-s}|) \\
+      &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1-(k+1)^2s}{(k+1)^2}}{\frac{1-k^2s}{k^2}}|)\\
+      &= \limsup\limits_{k\rightarrow\infty}(|\frac{k^2-k^2(k+1)^2s}{(k+1)^2-k^2(k+1)^2s}|) \,\,\,\, \mathrm{, zwei mal l'Hospital}\\
       &= \limsup\limits_{k\rightarrow\infty}(|\frac{2-12k^2s-12ks-2s}{2-12k^2s-12ks-2s}|)\\
-      &= \limsup\limits_{k\rightarrow\infty}(|1|)
+      &= \limsup\limits_{k\rightarrow\infty}(|1|) \\
       &= 1
-\end{align}
+\end{align*}
 
 Da nun $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) = 1$ ist handelt es sich um ein unterlineares Konvergenzverhalten, somit konvergiert die Reihe langsamer als linear.
 
@@ -196,7 +196,9 @@ Rcpp::List BorweinEuler(int s){
         
     }
     summe /= (1-pow(2,1-s));
-    Rprintf("Das Verfahren nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung ergibt %.16lf\n", summe);
+    Rprintf(
+      "Das Verfahren nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung \n ergibt %.16lf\n"
+      , summe);
     // Rückgabe für eine grafische Wiedergabe
     return List::create(Named("x") = x, Named("y") = y);
     }
@@ -227,4 +229,5 @@ lines(borwein$x, abs(euler$y - 1.6449340668482266), "l", col = "red")
 legend(55,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "dark blue", "red"), lty=1:1)
 
 ```
+
 Es wird deutlich, dass der das naive Summenverfahren deutlich länger als die beiden Implementationen nach Borwein braucht um gute Ergebnisser zu liefern.
