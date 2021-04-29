@@ -62,7 +62,7 @@ Diese Form der Reihe und die einhergehende Berechnung sind unter Implementation 
 
 Da wir eine Genauigkeit von 15 Dezimalstellen haben wollen hat die Reihe nach Borwein zwar eine vertrettbare, aber denoch recht lange Laufzeit.
 Zum verkürzen der Laufzeit wenden wir das Eulersche Verfahren zur Mittelwertbildung auf unsere alternierende Reihe an.
-Dabei werden die einzelnen Reihenglieder durch den Mittelwert des Reihenglieds selber und des nächsten Reihenglieds ersetzt.
+Dabei werden die einzelnen Reihenglieder durch den Mittelwert des Reihenglieds selber und dem vorherigen Reihenglieds ersetzt, zu beachten ist das wir zufor das erste Reihenglied bestimmen und aus der Summe ziehen müssen um nicht durch 0 zu teilen.
 
 \begin{equation}
     S_k' = \frac{1}{2}*(S_k +S_{n+1})
@@ -76,6 +76,11 @@ Und somit unsere neue Summe:
 \begin{equation}
     \zeta(s) = 2 * (0.5 +\, \sum_{k=2}^\infty \frac{1}{k^2}-\frac{1}{(k-1)^2})
 \end{equation}
+
+Durch die Impementierung in Implementation der Reihe nach Borwein mit Eulerschem Verfahren zur Mittelwertbildung können wir die Reihe nun neu bestimmen.
+Dabei fällt auf das zwar die laufzeit wesendlich kürzer ist, jedoch wir ein nur noch auf 13 Dezimalstellen genaues Ergebnis erhalten,
+da dies der Problemstellung nicht genügt ist die Reihe nach Borwein die best gefundenste Lösung.
+Bei einer Probelmstellung wo die lautzeit relavant wird und eine Genauigkeit von 13 Dezimalstellen genügen, würde sich die Reihe nach Borwein mit Mittelwertbildung nach Euler anbieten.
 
 
 # Impelmentation des naives Verfahren:
