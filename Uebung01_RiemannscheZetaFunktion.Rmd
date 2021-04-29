@@ -6,8 +6,9 @@ output:
   pdf_document: default
   html_document:
     df_print: paged
-header-includes: \usepackage{amssymb}
-header-includes: \usepackage{amsmath}
+header-includes: 
+ - \usepackage{amssymb}
+ - \usepackage{amsmath}
 ---
 
 ```{r setup, include=FALSE}
@@ -35,10 +36,10 @@ Für die Konvergenz bzw. das Konvergenzverhalten der Riemannschen Zeta Funktion 
 $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$ , mit den Reihengliedern $s_k = \frac{1}{k^2}$, bzw $s_{k+1}= \frac{1}{(k+1)^2}$  und dem bekanntem Grenzwert $s = \frac{\pi^2}{6}$ \footnote{J.-P. Serre: A course in arithmetic, Springer-Verlag New York (1973), ISBN 978-0-387-90040-7, S. 91.}.
 
 \begin{align}
-    \limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1}{k^2}-s}{\frac{1}{(k+1)^2}-s}|)
-      &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1-(k+1)^2s}{(k+1)^2}}{\frac{1-k^2s}{(k^2}}|)
-      &= \limsup\limits_{k\rightarrow\infty}(|\frac{k^2-k^2(k+1)^2s}{(k+1)^2-k^2(k+1)^2s}|)  , l'Hospital
-      &= \limsup\limits_{k\rightarrow\infty}(|\frac{2-12k^2s-12ks-2s}{2-12k^2s-12ks-2s}|)
+    \limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1}{k^2}-s}{\frac{1}{(k+1)^2}-s}|) \\
+      &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1-(k+1)^2s}{(k+1)^2}}{\frac{1-k^2s}{(k^2}}|)\\
+      &= \limsup\limits_{k\rightarrow\infty}(|\frac{k^2-k^2(k+1)^2s}{(k+1)^2-k^2(k+1)^2s}|)  , l'Hospital\\
+      &= \limsup\limits_{k\rightarrow\infty}(|\frac{2-12k^2s-12ks-2s}{2-12k^2s-12ks-2s}|)\\
       &= \limsup\limits_{k\rightarrow\infty}(|1|)
       &= 1
 \end{align}
