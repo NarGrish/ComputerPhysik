@@ -144,7 +144,7 @@ Rcpp::List borwein(int s){
     Rcpp::NumericVector y(100);
   // Quelltext
     long double summe = 0;
-    long double summe2 = 1;           // Summe mit nächsten Summenglied
+    long double summe2 = 1;           // Summe mit nächstem Summenglied
     long double vorzeichen = 1;
     int k = 1;
     while(fabs(summe2-summe)>pow(10,-16)){
@@ -180,7 +180,7 @@ Rcpp::List BorweinEuler(int s){
     Rcpp::NumericVector y(100);
   // Quelltext
     double summe = pow(1,-s)*0.5;   // Hälfte des ersten Glieds 
-    double summe2 = 2;              // Summe mit nächsten Summenglied
+    double summe2 = 2;              // Summe mit nächstem Summenglied
     double vorzeichen = -1;
     int k = 2;
     while(fabs(summe2-summe)>pow(10,-15)){
