@@ -44,7 +44,7 @@ $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$  mit den Reih
       &= 1
 \end{align*}
 
-Da nun $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) = 1$ ist, handelt es sich um ein unterlineares Konvergenzverhalten, somit konvergiert die Reihe langsamer als linear. Da sich analog zur obrigen Umformung ergibt, dass die Riemannschen Zeta Funktion ebenfalls die Gleichung $\lim\limits_{k\rightarrow\infty}(|\frac{s_{k+2}-s_{k+1}}{s_{k+1}-s_k}| = 1)$ erfüllt, konvergiert die Reihe sogar logarithmisch. \footnote{Beide Bedingungen stammen von dem Wikipediaartikel "Konvergenzgeschwindigkeit"}
+Da nun $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) = 1$ ist, handelt es sich um ein unterlineares Konvergenzverhalten, somit konvergiert die Reihe langsamer als linear. Da sich analog zur obrigen Umformung ergibt, dass die Riemannschen Zeta Funktion ebenfalls die Gleichung $\lim\limits_{k\rightarrow\infty}(|\frac{s_{k+2}-s_{k+1}}{s_{k+1}-s_k}|) = 1$ erfüllt, konvergiert die Reihe sogar logarithmisch. \footnote{Beide Bedingungen stammen von dem Wikipediaartikel "Konvergenzgeschwindigkeit"}
 
 
 ## Numerische Näherungsverfahren
@@ -88,12 +88,12 @@ Dabei werden die einzelnen Reihenglieder durch den Mittelwert des Reihenglieds s
 \end{equation}
 Für unseren Fall:
 \begin{equation}
-    S_k' = (-1)^{k-1}\frac{1}{2}(\frac{1}{k^2}+\frac{1}{(k-1)^2})
+    S_k' = (-1)^{k-1}\frac{1}{2}(\frac{1}{k^2}-\frac{1}{(k-1)^2})
 \end{equation}
 
 Und somit unsere neue Summe:
 \begin{equation}
-    \zeta(2) = 2 * (0.5 +\, \sum_{k=2}^\infty \frac{1}{k^2}-\frac{1}{(k-1)^2})
+    \zeta(2) = 2 * (0.5 +\, \sum_{k=2}^\infty (-1)^{k-1}(\frac{1}{k^2}-\frac{1}{(k-1)^2})
 \end{equation}
 
 Durch die Implementierung der Reihe nach Borwein mit dem Eulerschen Verfahren zur Mittelwertbildung können wir die Reihe nun neu bestimmen.
@@ -115,14 +115,14 @@ Rcpp::List naiveZetafunktion(){
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
   // Quelltext
-    long double sum = 0;
+    long double summe = 0;
     for (int i = 1; i < 100; i++)
     {
-        sum += 1.0/(i*i);
+        summe += 1.0/(i*i);
         
         // Einsammeln der ersten 100 Werte
           x[i] = i;
-          y[i] = sum;
+          y[i] = summe;
       
     }
     // Rückgabe für eine grafische Wiedergabe
@@ -144,21 +144,21 @@ Rcpp::List borwein(int s){
     Rcpp::NumericVector y(100);
   // Quelltext
     long double summe = 0;
-    long double summenext = 1;
+    long double summe2 = 1;           // Summe mit nächsten Summenglied
     long double vorzeichen = 1;
     int k = 1;
-    while(fabs(summenext-summe)>pow(10,-16)){
+    while(fabs(summe2-summe)>pow(10,-16)){
         summe += vorzeichen *pow(k,-s);
         vorzeichen *= -1;
-        summenext = vorzeichen *pow(k+1,-s) + summe;
+        summe2 = vorzeichen *pow(k+1,-s) + summe;
         // Einsammeln der ersten 100 Werte
         if(k<=100){
           x[k-1] = k;
-          y[k-1] = summenext/ (1-pow(2,1-s));
+          y[k-1] = summe2/ (1-pow(2,1-s));
         }
         k++;
     }
-    summe /= (1-pow(2,1-s));
+    summe /= (1-pow(2,1-s));          // Korrektur um den Vorfaktor
     Rprintf("Das Verfahren nach Borwein: %.16Lf \n",summe);
     // Rückgabe für eine grafische Wiedergabe
     return List::create(Named("x") = x, Named("y") = y);
@@ -179,23 +179,23 @@ Rcpp::List BorweinEuler(int s){
     Rcpp::NumericVector x(100);
     Rcpp::NumericVector y(100);
   // Quelltext
-    double summe = pow(1,-s)*0.5; // Hälfte des ersten Glieds 
-    double summenext = 2;
+    double summe = pow(1,-s)*0.5;   // Hälfte des ersten Glieds 
+    double summe2 = 2;              // Summe mit nächsten Summenglied
     double vorzeichen = -1;
     int k = 2;
-    while(fabs(summenext-summe)>pow(10,-15)){
+    while(fabs(summe2-summe)>pow(10,-15)){
         summe += vorzeichen *0.5*(pow(k,-s)-pow(k-1,-s));
         vorzeichen *= -1;
-        summenext = vorzeichen* 0.5*(pow(k+1,-s)-pow(k,-s)) + summe;
+        summe2 = vorzeichen* 0.5*(pow(k+1,-s)-pow(k,-s)) + summe;
         // Einsammeln der ersten 100 Werte
         if(k<=100){
           x[k-1] = k;
-          y[k-1] = summenext/ (1-pow(2,1-s));
+          y[k-1] = summe2/ (1-pow(2,1-s));
         }
         k++;
         
     }
-    summe /= (1-pow(2,1-s));
+    summe /= (1-pow(2,1-s));        // Korrektur um den Vorfaktor
     Rprintf(
       "Das Verfahren mit der Eulerschen Mittelwertbildung ergibt \n %.16lf\n"
       , summe);
