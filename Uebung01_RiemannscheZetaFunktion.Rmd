@@ -1,7 +1,7 @@
 ---
 title: 'Übung 01: Riemannsche Zeta Funktion'
 author: "Tobias Blesgen und Leonardo Thome"
-date: "28.04.2021"
+date: "05.05.2021"
 output:
   pdf_document: default
   html_document:
@@ -33,7 +33,7 @@ also $\zeta(2)$.
 ## Konvergenzverhalten der Riemannschen Zeta Funktion
 
 Für die Konvergenz bzw. das Konvergenzverhalten der Riemannschen Zeta Funktion betrachten wir den Wert von: 
-$\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$  mit den Reihengliedern $s_k = \frac{1}{k^2}$, bzw $s_{k+1}= \frac{1}{(k+1)^2}$  und dem bekannten Grenzwert $s = \frac{\pi^2}{6}$ \footnote{J.-P. Serre: A course in arithmetic, Springer-Verlag New York (1973), ISBN 978-0-387-90040-7, S. 91.}.
+$\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$  mit den Reihengliedern $s_k = \frac{1}{k^2}$, bzw $s_{k+1}= \frac{1}{(k+1)^2}$  und dem bekannten Grenzwert $s = \frac{\pi^2}{6}$.
 
 \begin{align*}
     \limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) &= \limsup\limits_{k\rightarrow\infty}(|\frac{\frac{1}{(k+1)^2}-s}{\frac{1}{k^2}-s}|) \\
@@ -44,7 +44,7 @@ $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|)$  mit den Reih
       &= 1
 \end{align*}
 
-Da nun $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) = 1$ ist, handelt es sich um ein unterlineares Konvergenzverhalten, somit konvergiert die Reihe langsamer als linear.
+Da nun $\limsup\limits_{k\rightarrow\infty}(|\frac{s_{k+1}-s}{s_{k}-s}|) = 1$ ist, handelt es sich um ein unterlineares Konvergenzverhalten, somit konvergiert die Reihe langsamer als linear. Da sich analog zur obrigen Umformung ergibt, dass die Riemannschen Zeta Funktion ebenfalls die Gleichung $\lim\limits_{k\rightarrow\infty}(|\frac{s_{k+2}-s_{k+1}}{s_{k+1}-s_k}| = 1)$ erfüllt, konvergiert die Reihe sogar logarithmisch. \footnote{Beide Bedingungen stammen von dem Wikipediaartikel "Konvergenzgeschwindigkeit"}
 
 
 ## Numerische Näherungsverfahren
@@ -231,4 +231,4 @@ legend(55,0.14,legend=c("Naiv", "Borwein", "Euler Borwein"), col = c("green", "d
 
 ```
 
-Es fällt auf, dass das naive Summenverfahren deutlich länger als die beiden Implementationen nach Borwein braucht, um gute Ergebnisse zu liefern.
+Es fällt auf, dass das naive Summenverfahren deutlich länger als die beiden Implementationen nach Borwein braucht, um gute Ergebnisse zu liefern. Dieses Beispiel verdeutlicht die große Relevanz des korrekten Implementationsverfahrens.
